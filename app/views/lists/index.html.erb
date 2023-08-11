@@ -1,9 +1,15 @@
 <div class="container">
-  <h1>Films</h1>
+  <h1>Genres</h1>
   <div class="cards">
   </div>
   <ul>
   <% @lists.each do |list| %>
+  <% if list.photo.attached?%>
+
+ <%= cl_image_tag list.photo.key, width: 400, height: 300, crop: :fill %>
+ <% else %>
+ <p>no image</p>
+ <%end%>
     <li><%= link_to list.name, list_path(list) %></li>
   <% end %>
 </ul>

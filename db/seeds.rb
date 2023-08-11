@@ -1,3 +1,4 @@
+require 'open-uri'
 Movie.destroy_all
 List.destroy_all
 # This file should contain all the record creation needed to seed the database with its default values.
@@ -9,8 +10,21 @@ List.destroy_all
 #   Character.create(name: "Luke", movie: movies.first)
 # Movie.destroy_all
 
-20.times do
-Movie.create(title: Faker::Movie.title, overview: Faker::Quote.most_interesting_man_in_the_world)
+
+# List.destroy_all
+
+# the Le Wagon copy of the API
+url = 'http://tmdb.lewagon.com/movie/top_rated'
+response = JSON.parse(URI.open(url).read)
+
+response['results'].each do |movie_hash|
+  # create an instance with the hash
+  Movie.create!(
+    poster_url: "https://image.tmdb.org/t/p/w500" + movie_hash['poster_path'],
+    rating: movie_hash['vote_average'],
+    title: movie_hash['title'],
+    overview: movie_hash['overview']
+  )
 end
 list_names = ['Horror', 'Rom Com' , 'Ghost', 'Action', 'Slow', 'Boring', 'Sleeping Pill']
 
